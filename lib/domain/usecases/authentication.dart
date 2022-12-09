@@ -8,5 +8,22 @@ class AuthenticationParams {
   final String email;
   final String password;
 
-  AuthenticationParams(this.email, this.password);
+  AuthenticationParams({
+    required this.email,
+    required this.password,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'email': email,
+      'password': password,
+    };
+  }
+
+  factory AuthenticationParams.fromMap(Map<String, dynamic> map) {
+    return AuthenticationParams(
+      email: map['email'] as String,
+      password: map['password'] as String,
+    );
+  }
 }

@@ -11,7 +11,8 @@ class RemoteAuthentication implements Authentication {
 
   @override
   Future<AccountEntity> auth(AuthenticationParams params) async {
-    await httpClient.request(url: url, mehtod: 'post');
+    await httpClient.request(
+        url: url, mehtod: HttpMethod.post, body: params.toMap());
 
     return AccountEntity('token');
   }

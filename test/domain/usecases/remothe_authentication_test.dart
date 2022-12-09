@@ -27,6 +27,8 @@ void main() {
     await sut.auth(params);
 
     verify(httpClient.request(
-        url: url, mehtod: HttpMethod.post, body: params.toMap()));
+        url: url,
+        mehtod: HttpMethod.post,
+        body: RemoteAuthenticationParams.fromDomain(params).toMap()));
   });
 }

@@ -1,5 +1,5 @@
 abstract class HttpClient {
-  Future<void>? request(
+  Future<Map>? request(
       {required String url, required HttpMethod mehtod, Map body});
 }
 

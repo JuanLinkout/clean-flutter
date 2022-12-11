@@ -1,6 +1,8 @@
-import 'package:flutter_study/domain/entities/account_entity.dart';
+import 'package:flutter_study/domain/entities/index.dart';
+import 'package:flutter_study/domain/helpers/index.dart';
 import 'package:flutter_study/domain/usecases/index.dart';
 
+import '../models/index.dart';
 import '../protocols/http/index.dart';
 
 class RemoteAuthentication implements Authentication {
@@ -11,12 +13,23 @@ class RemoteAuthentication implements Authentication {
 
   @override
   Future<AccountEntity> auth(AuthenticationParams params) async {
-    await httpClient.request(
-        url: url,
-        mehtod: HttpMethod.post,
-        body: RemoteAuthenticationParams.fromDomain(params).toMap());
+    try {
+      final body = RemoteAuthenticationParams.fromDomain(params).toMap();
+      final httpResponse = await httpClient.request(
+          url: url, mehtod: HttpMethod.post, body: body);
 
-    return AccountEntity('token');
+      if (httpResponse != null) {
+        return RemoteAccountModel.fromMap(httpResponse).toAccountEntity();
+      } else {
+        throw HttpError.serverError;
+      }
+    } on HttpError catch (error) {
+      if (error == HttpError.unauthorized) {
+        throw DomainError.invalidCredentials;
+      } else {
+        throw DomainError.unexpected;
+      }
+    }
   }
 }
 

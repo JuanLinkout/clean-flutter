@@ -76,4 +76,20 @@ void main() {
 
     expect(account.token, accessToken);
   });
+
+  test("Should throw ServerError if response is empty", () async {
+    when(httpClient.request(url: url, mehtod: HttpMethod.post, body: body))
+        .thenAnswer((_) => null);
+    final future = sut.auth(params);
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test("Should throw UnexpectedError if response is invalid", () async {
+    when(httpClient.request(url: url, mehtod: HttpMethod.post, body: body))
+        .thenAnswer((_) async => {'invalid_key': 'invalid_value'});
+    final future = sut.auth(params);
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
 }

@@ -1,3 +1,4 @@
+import 'package:flutter_study/data/protocols/http/index.dart';
 import 'package:flutter_study/domain/entities/index.dart';
 
 class RemoteAccountModel {
@@ -7,7 +8,12 @@ class RemoteAccountModel {
 
   factory RemoteAccountModel.fromMap(Map json) {
     final token = json['accessToken'];
-    return RemoteAccountModel(token);
+
+    if (token != null) {
+      return RemoteAccountModel(token);
+    } else {
+      throw HttpError.invalidData;
+    }
   }
 
   AccountEntity toAccountEntity() {

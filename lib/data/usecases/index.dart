@@ -1,1 +1,1 @@
-export './remote_atuhentication.dart';
+export 'authentication/remote_atuhentication.dart';

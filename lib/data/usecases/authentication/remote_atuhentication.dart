@@ -2,8 +2,8 @@ import 'package:flutter_study/domain/entities/index.dart';
 import 'package:flutter_study/domain/helpers/index.dart';
 import 'package:flutter_study/domain/usecases/index.dart';
 
-import '../models/index.dart';
-import '../protocols/http/index.dart';
+import '../../models/index.dart';
+import '../../protocols/http/index.dart';
 
 class RemoteAuthentication implements Authentication {
   final HttpClient httpClient;

@@ -4,24 +4,23 @@ import 'package:flutter_study/data/usecases/index.dart';
 import 'package:flutter_study/domain/helpers/index.dart';
 import 'package:flutter_study/domain/usecases/index.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
-  HttpClientSpy httpClient = HttpClientSpy();
-  String url = faker.internet.httpUrl();
-  RemoteAuthentication sut =
-      RemoteAuthentication(httpClient: httpClient, url: url);
+  late HttpClientSpy httpClient;
+  late String url;
+  late RemoteAuthentication sut;
 
   final email = faker.internet.email();
   final password = faker.internet.password();
   final params = AuthenticationParams(email: email, password: password);
   final body = RemoteAuthenticationParams.fromDomain(params).toMap();
 
-  PostExpectation mockRequest() {
-    return when(
-        httpClient.request(url: url, mehtod: HttpMethod.post, body: body));
+  mockRequest() {
+    return when(() =>
+        httpClient.request(url: url, method: HttpMethod.post, body: body));
   }
 
   setUp(() {
@@ -77,13 +76,6 @@ void main() {
     final account = await sut.auth(params);
 
     expect(account.token, accessToken);
-  });
-
-  test("Should throw ServerError if response is empty", () async {
-    mockRequest().thenAnswer((_) => null);
-    final future = sut.auth(params);
-
-    expect(future, throwsA(DomainError.unexpected));
   });
 
   test("Should throw UnexpectedError if response is invalid", () async {
